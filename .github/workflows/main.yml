@@ -29,8 +29,9 @@ jobs:
       id: bike
       run: |
         result=$(python bike.py)
-        echo "Result of bike.py: $result"
-        echo "result=$result" >> $GITHUB_OUTPUT
+        echo "Result of bike.py:\n$result"
+        escaped_result=$(echo "$result" | sed 's/$/\\n/' | tr -d '\n')
+        echo "result=$escaped_result" >> $GITHUB_OUTPUT
 
     - name: Send result to ntfy.sh
       if: always()  # Run this step even if the previous one fails
