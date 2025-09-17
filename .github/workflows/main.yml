@@ -1,10 +1,8 @@
-name: Run bike.py Daily at 6 PM European Time
+name: Run bike.py daily at 9am UTC
 
 on:
   schedule:
-    # This cron expression schedules the action at 6 PM European Time (CET/CEST)
-    # GitHub Actions uses UTC, so to run at 6 PM CET (which is UTC +1 in winter and UTC +2 in summer), we schedule it at 5 PM UTC.
-    - cron: '0 17 * * *' # This runs at 5 PM UTC, which corresponds to 6 PM CET/CEST
+    - cron: '0 9 * * *'
 
   # Manual trigger to run the action from GitHub UI
   workflow_dispatch:
@@ -32,7 +30,7 @@ jobs:
       run: |
         result=$(python bike.py)
         echo "Result of bike.py: $result"
-        echo "::set-output name=result::$result"
+        echo "result=$result" >> $GITHUB_OUTPUT
 
     - name: Send result to ntfy.sh
       if: always()  # Run this step even if the previous one fails
