@@ -28,5 +28,15 @@ jobs:
         pip install requests
         
     - name: Run bike.py script
+      id: bike
       run: |
-        python bike.py
+        result=$(python bike.py)
+        echo "Result of bike.py: $result"
+        echo "::set-output name=result::$result"
+
+    - name: Send result to ntfy.sh
+      if: always()  # Run this step even if the previous one fails
+      run: |
+        NTFY_URL="https://ntfy.sh/cube-club-bike-blub-bike-37362"
+        result="${{ steps.bike.outputs.result }}"
+        curl -X POST "$NTFY_URL" -d "$result"
